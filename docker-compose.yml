@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  mycardnuke:
+    image: mycardnuke
+    build:
+      context: .
+      dockerfile: MyCardNuke/Dockerfile
