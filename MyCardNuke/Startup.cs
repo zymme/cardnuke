@@ -13,6 +13,12 @@ using Microsoft.Extensions.Options;
 
 using Swashbuckle.AspNetCore;
 using MyCardNuke.Domain;
+using MyCardNuke.Repository;
+
+using Microsoft.EntityFrameworkCore;
+
+
+using MediatR;
 
 namespace MyCardNuke
 {
@@ -31,6 +37,14 @@ namespace MyCardNuke
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<IEventStoreCard, EventStoreCard>();
+            services.AddMediatR();
+
+            var connectionString = Configuration["ConnectionStrings:CardAccessPostgreSqlProvider"];
+            Console.WriteLine($"db conn string : {connectionString}");
+
+            services.AddDbContext<CardContext>(o => o.UseNpgsql(connectionString, b =>
+                                                                b.MigrationsAssembly("MyCardNuke")));
+            services.AddScoped<ICardRepository, CardRepository>();
 
             services.AddSwaggerGen(c =>
             {

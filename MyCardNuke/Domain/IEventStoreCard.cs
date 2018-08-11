@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-using MyCardNuke.Models;
+using MyCardNuke.Commands;
 
 namespace MyCardNuke.Domain
 {
     public interface IEventStoreCard
     {
         Task<bool> Connect();
-        Task<bool> WriteCardToStream(Card card);
+        Task<bool> WriteNewCardToStream(AddCard card);
+        Task<bool> WritePayCardToStream(PayCard card);
         bool Close();
     }
 }

@@ -9,7 +9,9 @@ using Microsoft.Extensions.Logging;
 
 using MyCardNuke.Domain;
 using MyCardNuke.Models;
+using MyCardNuke.Commands;
 
+using MediatR;
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MyCardNuke.Controllers
@@ -17,46 +19,58 @@ namespace MyCardNuke.Controllers
     [Route("api/card")]
     public class CardController : Controller
     {
-        private readonly IEventStoreCard _eventStoreCard;
         private readonly ILogger<CardController> _logger;
+        private readonly IMediator _mediator;
 
-        public CardController(IEventStoreCard eventStoreCard, ILogger<CardController> logger)
+        public CardController(ILogger<CardController> logger, IMediator mediator)
         {
-            _eventStoreCard = eventStoreCard;
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpPost("AddCard")]
-        public async Task<IActionResult> AddCard(Card card)
+        public async Task<IActionResult> AddCard(AddCard card)
         {
             try 
             {
-                _logger.LogInformation("Made connection to EventStore ...");
+                _logger.LogInformation("sending call to handle add card command ...");
 
-                // lets add an event to the event store for now here for testing purposes
-                if(await _eventStoreCard.Connect())
-                {
-                    var writeResult = await _eventStoreCard.WriteCardToStream(card);
+                bool addcard = await _mediator.Send(card);
 
-                    _eventStoreCard.Close();
+                if (addcard)
+                    return Ok("Card Added");
 
-                    if (writeResult)
-                        _logger.LogInformation("Event writtent to stream");
-                }
-                else 
-                {
-                    _logger.LogInformation("Problem in connecting to event store");
-                }
+                return BadRequest("Card Not Added");
+
+                //// lets add an event to the event store for now here for testing purposes
+                //if(await _eventStoreCard.Connect())
+                //{
+                //    var writeResult = await _eventStoreCard.WriteCardToStream(card);
+
+                //    _eventStoreCard.Close();
+
+                //    if (writeResult)
+                //        _logger.LogInformation("Event writtent to stream");
+                //}
+                //else 
+                //{
+                //    _logger.LogInformation("Problem in connecting to event store");
+                //}
 
 
 
+            }
+            catch(ApplicationException ae)
+            {
+                return BadRequest(ae.Message);
             }
             catch(Exception e)
             {
                 Console.WriteLine($"Exception in AddCard {e.Message}");
                 _logger.LogError($"Exception in AccCard {e.Message}");
+                return StatusCode(500, e.Message);
             }
-            return Ok("Not Implemented Yet");
+
         }
 
 

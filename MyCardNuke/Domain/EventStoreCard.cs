@@ -10,6 +10,7 @@ using System.Net;
 using MyCardNuke.Models;
 using Newtonsoft.Json;
 using EventStore.ClientAPI.SystemData;
+using MyCardNuke.Commands;
 
 namespace MyCardNuke.Domain
 {
@@ -65,7 +66,7 @@ namespace MyCardNuke.Domain
         }
 
 
-        public async Task<bool> WriteCardToStream(Card card)
+        public async Task<bool> WriteNewCardToStream(AddCard card)
         {
             try
             {
@@ -134,6 +135,9 @@ namespace MyCardNuke.Domain
             return true;
         }
 
-       
+        public Task<bool> WritePayCardToStream(PayCard card)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
