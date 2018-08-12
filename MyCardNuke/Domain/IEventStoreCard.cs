@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MyCardNuke.Commands;
 
-using MyCardNuke.Entities;
+using MyCardNukeDataLib.Entities;
 
 namespace MyCardNuke.Domain
 {

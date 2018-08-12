@@ -7,7 +7,8 @@ using Microsoft.Extensions.Configuration;
 using EventStore.ClientAPI;
 
 using System.Net;
-using MyCardNuke.Entities;
+
+using MyCardNukeDataLib.Entities;
 using Newtonsoft.Json;
 using EventStore.ClientAPI.SystemData;
 using MyCardNuke.Commands;
@@ -33,10 +34,7 @@ namespace MyCardNuke.Domain
             _logger.LogInformation("Attempting connection to EventStore ...");
 
             try
-            {
-                var connString = _configuration["EventStoreSettings:Server"];
-                Uri eventStoreUri = new Uri(connString);
-
+            {               
                 ConnectionSettings connectionSettings = ConnectionSettings
                     .Create()
                     .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(1000))

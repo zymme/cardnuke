@@ -3,10 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
+
 using MyCardNuke.Commands;
 using MyCardNuke.Domain;
-using MyCardNuke.Repository;
-using MyCardNuke.Entities;
+using MyCardNukeDataLib.Repository;
+using MyCardNukeDataLib.Entities;
 
 using Newtonsoft.Json;
 

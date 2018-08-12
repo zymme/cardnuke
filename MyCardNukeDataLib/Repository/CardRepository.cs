@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using MyCardNuke.Entities;
+using MyCardNukeDataLib.Entities;
+using MyCardNukeDataLib.Context;
 
-
-namespace MyCardNuke.Repository
+namespace MyCardNukeDataLib.Repository
 {
     public class CardRepository : ICardRepository
     {

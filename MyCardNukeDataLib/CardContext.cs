@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MyCardNukeDataLib.Entities;
 
-namespace MyCardNukeDataLib
+namespace MyCardNukeDataLib.Context
 {
     public class CardContext : DbContext
     {

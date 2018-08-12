@@ -13,7 +13,9 @@ using Microsoft.Extensions.Options;
 
 using Swashbuckle.AspNetCore;
 using MyCardNuke.Domain;
-using MyCardNuke.Repository;
+
+using MyCardNukeDataLib.Repository;
+using MyCardNukeDataLib.Context;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -40,8 +42,7 @@ namespace MyCardNuke
             services.AddMediatR();
 
             var connectionString = Configuration["ConnectionStrings:CardAccessPostgreSqlProvider"];
-            Console.WriteLine($"db conn string : {connectionString}");
-
+           
             services.AddDbContext<CardContext>(o => o.UseNpgsql(connectionString, b =>
                                                                 b.MigrationsAssembly("MyCardNuke")));
             services.AddScoped<ICardRepository, CardRepository>();

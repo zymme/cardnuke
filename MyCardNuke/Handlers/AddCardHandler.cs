@@ -5,8 +5,9 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using MyCardNuke.Commands;
 using MyCardNuke.Domain;
-using MyCardNuke.Entities;
-using MyCardNuke.Repository;
+
+using MyCardNukeDataLib.Repository;
+using MyCardNukeDataLib.Entities;
 
 using Newtonsoft.Json;
 
