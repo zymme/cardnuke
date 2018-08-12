@@ -60,8 +60,6 @@ namespace MyCardNuke.Controllers
                 //    _logger.LogInformation("Problem in connecting to event store");
                 //}
 
-
-
             }
             catch(ApplicationException ae)
             {
@@ -76,18 +74,24 @@ namespace MyCardNuke.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ChargeCard(ChargeCreditCard charge)
+        [HttpPost("ChargeCreditCard")]
+        public async Task<IActionResult> ChargeCreditCard([FromBody]ChargeCreditCard charge)
         {
             try 
             {
                 _logger.LogInformation($"Entered ChargeCard processing : {JsonConvert.SerializeObject(charge)}");
 
+                var bchargecard = await _mediator.Send(charge);
 
+                if (bchargecard)
+                    return Ok("Charge recorded");
+
+                return BadRequest("Charge not recorded");
             }
             catch(Exception e)
             {
-                
+                _logger.LogError($"Error in ChargeCard: {e.Message}");
+                return StatusCode(500, e.Message);
             }
             throw new NotImplementedException();
         }

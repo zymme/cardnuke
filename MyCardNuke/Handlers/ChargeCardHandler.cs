@@ -43,14 +43,27 @@ namespace MyCardNuke.Handlers
                 };
 
                 // persist to repository
-                if(!await _cardRepository.InsertCharge(chargeCard))
-                {
-                    _logger.LogError("Error saving charge card information");
-                    throw new Exception("Error saving charge card information");
-                }
+                //if(!await _cardRepository.InsertCharge(chargeCard))
+                //{
+                //    _logger.LogError("Error saving charge card information");
+                //    throw new Exception("Error saving charge card information");
+                //}
 
                 // record event in eventstore
+                if (await _eventStoreCard.Connect())
+                {
+                    var writeResult = await _eventStoreCard.WriteChargeCardToStream(chargeCard);
 
+                    if (writeResult)
+                        _logger.LogInformation("Event written to stream");
+                }
+                else
+                {
+                    _logger.LogInformation("Problem in connecting to event store");
+                }
+                _eventStoreCard.Close();
+
+                return true;
 
             }
             catch(Exception e)

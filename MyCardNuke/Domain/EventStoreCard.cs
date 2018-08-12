@@ -150,7 +150,7 @@ namespace MyCardNuke.Domain
                 var eventData = new EventData(chargeEventStoreGuid, "chargeCreditCard", true,
                                               cardBytes, cardBytes);
 
-                var writeResult = await this.connection.AppendToStreamAsync("cardtx-"+card.guid_card.ToString(),
+                var writeResult = await this.connection.AppendToStreamAsync("cardtx",
                                                                             ExpectedVersion.Any, eventData);
                 
                 return true;

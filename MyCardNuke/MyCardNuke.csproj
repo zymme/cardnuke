@@ -12,8 +12,6 @@
     <Folder Include="Domain\" />
     <Folder Include="Commands\" />
     <Folder Include="Handlers\" />
-    <Folder Include="Repository\" />
-    <Folder Include="Entities\" />
   </ItemGroup>
 
   <ItemGroup>
