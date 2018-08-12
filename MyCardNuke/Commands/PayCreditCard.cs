@@ -1,9 +1,9 @@
 ﻿using System;
 namespace MyCardNuke.Commands
 {
-    public class PayCard
+    public class PayCreditCard
     {
-        public PayCard()
+        public PayCreditCard()
         {
         }
     }

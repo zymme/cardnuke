@@ -135,9 +135,35 @@ namespace MyCardNuke.Domain
             return true;
         }
 
-        public Task<bool> WritePayCardToStream(PayCard card)
+        public Task<bool> WritePayCardToStream(PayCreditCard card)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> WriteChargeCardToStream(ChargeCard card)
+        {
+
+            try 
+            {
+                Guid chargeEventStoreGuid = Guid.NewGuid();
+
+                byte[] cardBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(card));
+
+                var eventData = new EventData(chargeEventStoreGuid, "chargeCreditCard", true,
+                                              cardBytes, cardBytes);
+
+                var writeResult = await this.connection.AppendToStreamAsync("cardtx-"+card.guid_card.ToString(),
+                                                                            ExpectedVersion.Any, eventData);
+                
+                return true;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError($"Error in WriteChargeCardToStream: {e.Message}");
+                throw e;
+            }
+
+
         }
     }
 }

@@ -10,7 +10,8 @@ namespace MyCardNuke.Domain
     {
         Task<bool> Connect();
         Task<bool> WriteNewCardToStream(Card card);
-        Task<bool> WritePayCardToStream(PayCard card);
+        Task<bool> WritePayCardToStream(PayCreditCard card);
+        Task<bool> WriteChargeCardToStream(ChargeCard card);
         bool Close();
     }
 }

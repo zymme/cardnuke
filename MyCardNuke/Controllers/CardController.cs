@@ -14,6 +14,9 @@ using MyCardNuke.Commands;
 using MediatR;
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
+using Newtonsoft.Json;
+
+
 namespace MyCardNuke.Controllers
 {
     [Route("api/card")]
@@ -71,6 +74,22 @@ namespace MyCardNuke.Controllers
                 return StatusCode(500, e.Message);
             }
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChargeCard(ChargeCreditCard charge)
+        {
+            try 
+            {
+                _logger.LogInformation($"Entered ChargeCard processing : {JsonConvert.SerializeObject(charge)}");
+
+
+            }
+            catch(Exception e)
+            {
+                
+            }
+            throw new NotImplementedException();
         }
 
 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using MyCardNuke.Entities;
+using MyCardNukeDataLib.Entities;
 
 
-namespace MyCardNuke.Repository
+namespace MyCardNukeDataLib.Repository
 {
     public interface ICardRepository
     {
