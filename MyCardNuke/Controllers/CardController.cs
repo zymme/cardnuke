@@ -29,7 +29,7 @@ namespace MyCardNuke.Controllers
         }
 
         [HttpPost("AddCard")]
-        public async Task<IActionResult> AddCard(AddCard card)
+        public async Task<IActionResult> AddCard([FromBody]AddCard card)
         {
             try 
             {

@@ -32,11 +32,14 @@ namespace MyCardNuke.Handlers
             {
                 _logger.LogInformation($"Handle AddCard : {JsonConvert.SerializeObject(request)}");
 
-                //TODO: check if card (last_four) exists already - if so throw ApplicationException stating so
+                // check if card (last_four) exists already - if so throw ApplicationException
+                if (_cardRepository.GetByLastFour(request.LastFour))
+                    throw new ApplicationException($"The card [{request.LastFour}] already exists ");
 
                 var newCard = new Card
                 {
                     guid_card = Guid.NewGuid(),
+                    create_date = DateTime.Now,
                     last_four = request.LastFour,
                     total = request.Total
                     
@@ -45,33 +48,33 @@ namespace MyCardNuke.Handlers
                 if(!await _cardRepository.Insert(newCard))
                 {
                     _logger.LogError("Error saving card information");
+                    throw new Exception("Error saving card information");
                 }
 
-
-
                 // lets add an event to the event store for now here for testing purposes
-                //if (await _eventStoreCard.Connect())
-                //{
-                //    var writeResult = await _eventStoreCard.WriteNewCardToStream(request);                   
+                if (await _eventStoreCard.Connect())
+                {
+                    var writeResult = await _eventStoreCard.WriteNewCardToStream(newCard);                   
 
-                //    if (writeResult)
-                //        _logger.LogInformation("Event written to stream");
-                //}
-                //else
-                //{
-                //    _logger.LogInformation("Problem in connecting to event store");
-                //}
-                //_eventStoreCard.Close();
+                    if (writeResult)
+                        _logger.LogInformation("Event written to stream");
+                }
+                else
+                {
+                    _logger.LogInformation("Problem in connecting to event store");
+                }
+                _eventStoreCard.Close();
 
                 return true;
             }
             catch(Exception e)
             {
-                Console.WriteLine($"Error in Handle AddCardHandler: {e.Message}");
+                _logger.LogError($"Error in Handle AddCardHandler: {e.Message}");
                 _eventStoreCard.Close();
+                throw e;
             }
 
-            return false;
+
         }
     }
 }

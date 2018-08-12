@@ -9,5 +9,6 @@ namespace MyCardNuke.Repository
     public interface ICardRepository
     {
         Task<bool> Insert(Card card);
+        bool GetByLastFour(string lastfour);
     }
 }

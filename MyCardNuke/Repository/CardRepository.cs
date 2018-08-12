@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using MyCardNuke.Entities;
 
@@ -18,11 +19,31 @@ namespace MyCardNuke.Repository
             _cardContext = cardContext;
         }
 
+        public bool GetByLastFour(string lastfour)
+        {
+            var card = _cardContext.Cards.Where(x => x.last_four == lastfour)
+                                   .FirstOrDefault();
+            if (card != null)
+                return true;
+
+
+            return false;
+        }
+
 
         public async Task<bool> Insert(Card card)
         {
-            _cardContext.Add(card);
-            return await Save();
+            try 
+            {
+                _cardContext.Add(card);
+                return await Save();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError($"Error in Insert: {e.Message}");
+                return false;
+            }
+           
         }
 
         private async Task<bool> Save()

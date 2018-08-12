@@ -11,7 +11,7 @@ namespace MyCardNuke.Entities
     public class Card
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         public DateTime create_date { get; set; }
         public string last_four { get; set; }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using EventStore.ClientAPI;
 
 using System.Net;
-using MyCardNuke.Models;
+using MyCardNuke.Entities;
 using Newtonsoft.Json;
 using EventStore.ClientAPI.SystemData;
 using MyCardNuke.Commands;
@@ -66,7 +66,7 @@ namespace MyCardNuke.Domain
         }
 
 
-        public async Task<bool> WriteNewCardToStream(AddCard card)
+        public async Task<bool> WriteNewCardToStream(Card card)
         {
             try
             {

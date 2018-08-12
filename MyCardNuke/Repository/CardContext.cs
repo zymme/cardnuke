@@ -12,6 +12,6 @@ namespace MyCardNuke.Repository
         {
         }
 
-        public DbSet<Card> cards { get; set; }
+        public DbSet<Card> Cards { get; set; }
     }
 }

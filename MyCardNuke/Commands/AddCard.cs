@@ -9,9 +9,7 @@ namespace MyCardNuke.Commands
         public AddCard()
         {
         }
-
-        public int Id { get; set; }
-        public Guid GuidCard { get; set; }
+               
         public string LastFour { get; set; }
 
         public double Total { get; set; }
