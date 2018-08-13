@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using MyCardNuke.Domain;
-using MyCardNuke.Models;
 using MyCardNuke.Commands;
 
 using MediatR;
@@ -38,10 +37,10 @@ namespace MyCardNuke.Controllers
             {
                 _logger.LogInformation("sending call to handle add card command ...");
 
-                bool addcard = await _mediator.Send(card);
+                var addcard = await _mediator.Send(card);
 
-                if (addcard)
-                    return Ok("Card Added");
+                if (addcard != null)
+                    return Ok(addcard);
 
                 return BadRequest("Card Not Added");
 

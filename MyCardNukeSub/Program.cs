@@ -29,12 +29,13 @@ namespace MyCardNukeSub
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
             Configuration = builder.Build();
 
+
             try 
             {
                 var serviceProvider = new ServiceCollection()
                     .AddLogging()
                     .AddOptions()
-                    .AddDbContext<CardContext>(options => options.UseNpgsql(Configuration.GetSection("CardAccessPostgreSqlProvider").Value), ServiceLifetime.Transient)
+                    .AddDbContext<CardContext>(options => options.UseNpgsql(Configuration.GetConnectionString("CardAccessPostgreSqlProvider")), ServiceLifetime.Transient)
                     .AddTransient<ICardRepository, CardRepository>()
                     .AddSingleton<PersistentSubcription>()
 

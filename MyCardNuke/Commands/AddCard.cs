@@ -1,10 +1,12 @@
 ﻿using System;
 
+using MyCardNuke.Dto;
+
 using MediatR;
 
 namespace MyCardNuke.Commands
 {
-    public class AddCard : IRequest<bool>
+    public class AddCard : IRequest<Card>
     {
         public AddCard()
         {

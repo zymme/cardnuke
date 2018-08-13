@@ -7,13 +7,13 @@ using MyCardNuke.Commands;
 using MyCardNuke.Domain;
 
 using MyCardNukeDataLib.Repository;
-using MyCardNukeDataLib.Entities;
+using MyCardNuke.Dto;
 
 using Newtonsoft.Json;
 
 namespace MyCardNuke.Handlers
 {
-    public class AddCardHandler : IRequestHandler<AddCard, bool>
+    public class AddCardHandler : IRequestHandler<AddCard, Card>
     {
         private readonly IEventStoreCard _eventStoreCard;
         private readonly ILogger<AddCardHandler> _logger;
@@ -27,7 +27,7 @@ namespace MyCardNuke.Handlers
             _cardRepository = cardRepository;
         }
 
-        public async Task<bool> Handle(AddCard request, CancellationToken cancellationToken)
+        public async Task<Card> Handle(AddCard request, CancellationToken cancellationToken)
         {
             try
             {
@@ -36,8 +36,8 @@ namespace MyCardNuke.Handlers
                 // check if card (last_four) exists already - if so throw ApplicationException
                 if (_cardRepository.GetByLastFour(request.LastFour))
                     throw new ApplicationException($"The card [{request.LastFour}] already exists ");
-
-                var newCard = new Card
+                
+                var newCard = new MyCardNukeDataLib.Entities.Card
                 {
                     guid_card = Guid.NewGuid(),
                     create_date = DateTime.Now,
@@ -66,7 +66,15 @@ namespace MyCardNuke.Handlers
                 }
                 _eventStoreCard.Close();
 
-                return true;
+                return new Card
+                {
+                    CreateDate = newCard.create_date,
+                    GuidCard = newCard.guid_card, 
+                    Id = newCard.id,
+                    LastFour = newCard.last_four,
+                    Total = newCard.total
+                };
+
             }
             catch(Exception e)
             {

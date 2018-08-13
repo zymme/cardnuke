@@ -62,8 +62,9 @@ namespace MyCardNukeSub.Subscriptions
         {
             try 
             {
-                _connection.ConnectToPersistentSubscription(STREAM, STREAM_GROUP_CARDTXGROUP, (_, x) =>
+                _connection.ConnectToPersistentSubscription(STREAM, STREAM_GROUP_CARDTXGROUP, async (_, x) =>
                 {
+                    
                     Console.WriteLine("Received an event!");
                     var data = Encoding.ASCII.GetString(x.Event.Data);
 
@@ -71,9 +72,14 @@ namespace MyCardNukeSub.Subscriptions
 
                     Console.WriteLine($"event received : {JsonConvert.SerializeObject(chargeCard)}");
 
-                   
-                    _cardRepository.InsertCharge(chargeCard).Wait();
+                    var binsert = await _cardRepository.InsertCharge(chargeCard);
+                    if(!binsert)
+                    {
+                        Console.WriteLine("Insert Charge on card unsuccessful");
+                        throw new Exception("Insert Charge on card unsuccessful");
+                    }
 
+                    Console.WriteLine($"Insert Charge on card successful: cardid={chargeCard.id}");
 
                 }, subscriptionDropped: null, userCredentials: null, bufferSize: 10, autoAck: true);
 
